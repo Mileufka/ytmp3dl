@@ -4,6 +4,8 @@
 import sys
 from mutagen.easyid3 import EasyID3
 
+#def tag()
+
 metatag = EasyID3(sys.argv[1])
 metatag['title'] = sys.argv[2]
 
