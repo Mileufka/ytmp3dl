@@ -18,8 +18,8 @@ for line in datas:
     filename_name = name.replace(' ','_')
     filename_artist = artist.replace(' ','_')
     complement = complement.replace(' ','_')
-    #filepath = '~/music/buffer/'
-    filepath = ''
+    filepath = 'storage/'
+    #filepath = ''
 
     filename=filepath+filename_artist+'_-_'+filename_name+'_('+complement+')'
 
