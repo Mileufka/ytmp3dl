@@ -2,6 +2,7 @@
 #ytmp3dl.py
 
 import os
+from tagger import apply_tags
 
 with open('download_list.txt') as f:
     datas = f.readlines()
@@ -17,10 +18,22 @@ for line in datas:
     filename_name = name.replace(' ','_')
     filename_artist = artist.replace(' ','_')
     complement = complement.replace(' ','_')
+    #filepath = '~/music/buffer/'
+    filepath = ''
 
-    filename=filename_name+'_-_'+filename_artist+'_('+complement+')'
+    filename=filepath+filename_artist+'_-_'+filename_name+'_('+complement+')'
 
-    cmd = 'youtube-dl -x --audio-format mp3 --audio-quality 192k --mark-watched --output "~/music/buffer/'+filename+'.mp3" '+url
+    cmd = 'youtube-dl -x --audio-format mp3 --audio-quality 192k --mark-watched --output "'+filename+'.%(ext)s" '+url
     
     os.system(cmd)
-    #print(cmd)
+
+    #filename=filepath+filename_artist+'_-_'+filename_name+'_\('+complement+'\).mp3'
+    #os.system('chmod 777 '+filename)
+
+    #filename = filename.replace('\(','(')
+    #filename = filename.replace('\)',')')
+
+    filename+='.mp3'
+    #filename=filename.encode('utf8')
+    apply_tags(filename,name,artist)
+print("\n\nEnd of script")
