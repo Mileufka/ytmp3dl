@@ -1,22 +1,29 @@
 #!/usr/bin/python3
 #tagger.py
 
-import sys
+import mutagen
 from mutagen.easyid3 import EasyID3
 
-#def tag()
+def apply_tags(filename,title,artist):
 
-metatag = EasyID3(sys.argv[1])
-metatag['title'] = sys.argv[2]
+    print('\n\n'+filename+'\n\n')
+    
+    try:
+        metatag = EasyID3(filename)
+    except:
+        metatag = mutagen.File(filename, easy=True)
+        metatag = add_tags()
+
+    metatag['title'] = title
+    metatag['artist'] = artist
+    metatag.save()
 
 #print("title : ", metatag['title'])
 
-if len(sys.argv) >= 4:
-    metatag['artist'] = sys.argv[3]
+#    if len(sys.argv) >= 4:
+#        metatag['artist'] = artist
 #    if len(sys.argv) >= 5:
 #        metatag['date'] = int(sys.argv[4])
-
-metatag.save()
 
 #print('Number of arguments:', len(sys.argv), 'arguments.')
 #print('Argument list:', str(sys.argv))
