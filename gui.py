@@ -21,11 +21,11 @@ class Main_frame(Frame):
         self.nb_panel = 0
         self.panel_set = set()
 
-        self.add_panel()
-
         self.scrollable_frame.bind("<Configure>",lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
-        self.canvas.create_window((0, 0), window=self.scrollable_frame,anchor="nw")
+        self.scrollable_frame_id = self.canvas.create_window((0, 0), window=self.scrollable_frame,anchor="nw")
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
+
+        self.canvas.bind('<Configure>', self._configure_canvas)
 
         self.top_frame.pack(anchor=N,side=TOP,fill=X,expand=False)
         self.mid_frame.pack(anchor=N,side=TOP,fill=BOTH,expand=True)
@@ -43,6 +43,15 @@ class Main_frame(Frame):
     def add_panel(self):
         self.panel_set.add(Panel_frame(master=self.scrollable_frame,nb=self.nb_panel))
         self.nb_panel += 1
+
+    def _configure_canvas(self,event):
+        """
+        Used to correct panel_frames width
+        """
+        if self.scrollable_frame.winfo_reqwidth() != self.canvas.winfo_width():
+            # update the inner frame's width to fill the canvas
+            self.canvas.itemconfigure(self.scrollable_frame_id, width=self.canvas.winfo_width())
+        
 
 class Panel_frame(Frame):
     def __init__(self, master=None, nb=0):
