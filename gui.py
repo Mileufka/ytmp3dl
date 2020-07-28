@@ -16,7 +16,9 @@ class Main_frame(Frame):
         self.scrollbar = Scrollbar(master=self.mid_frame,orient="vertical",command=self.canvas.yview)
         self.bottom_frame = Frame(master=self)
         self.button_quit = Button(master=self.bottom_frame,text="Close",fg="red",command=self.close_window,relief=GROOVE)
+        self.button_dl = Button(master=self.bottom_frame,text="Download",fg="black",relief=GROOVE)
         self.button_add = Button(master=self.bottom_frame,text="Add",fg="black",command=self.add_panel,relief=GROOVE)
+        
 
         self.nb_panel = 0
         self.panel_set = set()
@@ -33,8 +35,8 @@ class Main_frame(Frame):
         self.scrollbar.pack(anchor=E,side=RIGHT,fill=Y,expand=False)
         self.bottom_frame.pack(anchor=S,side=BOTTOM,fill=X,expand=False)
         self.button_quit.pack(anchor=N,side=RIGHT, padx=2)
+        self.button_dl.pack(anchor=N,side=RIGHT, padx=2)
         self.button_add.pack(anchor=N,side=RIGHT, padx=2)
-
         
 
     def close_window(self):
@@ -65,26 +67,43 @@ class Panel_frame(Frame):
         self.artist = Entry(master=self)
         self.label_track = Label(master=self,text='Track:')
         self.track = Entry(master=self)
+        self.button_gen_filename = Button(master=self,text="Generate",fg="black",command=self.generate_filename,relief=GROOVE)
         self.label_filename = Label(master=self,text='Filename:')
         self.filename = Entry(master=self)
+        self.button_del = Button(master=self,text="X",fg="red",command=self.del_panel,relief=GROOVE)
 
         self.pack(anchor=NW,side=TOP,fill=X,expand=True)
 
         self.label_url.grid(row=0,padx=2,pady=2,sticky=W)
         self.url.grid(row=0,column=1,padx=2,pady=2,columnspan=3,sticky=W+E)
+        self.button_del.grid(row=0,column=4,rowspan=4,padx=2,pady=2,sticky=N+S+E)
         self.label_artist.grid(row=1,column=0,padx=2,pady=2,sticky=W)
         self.artist.grid(row=1,column=1,padx=2,pady=2,sticky=W+E)
         self.label_track.grid(row=1,column=2,padx=2,pady=2,sticky=W)
         self.track.grid(row=1,column=3,padx=2,pady=2,sticky=W+E)
-        self.label_filename.grid(row=2,column=0,padx=2,pady=10,sticky=W)
-        self.filename.grid(row=2,column=1,padx=2,pady=10,columnspan=3,sticky=W+E)
+        self.button_gen_filename.grid(row=2,column=1,pady=1,sticky=W)
+        self.label_filename.grid(row=3,column=0,padx=2,pady=10,sticky=W)
+        self.filename.grid(row=3,column=1,padx=2,pady=10,columnspan=3,sticky=W+E)
+        
 
         self.grid_rowconfigure(0,weight=1)
         self.grid_rowconfigure(1,weight=1)
+        self.grid_rowconfigure(2,weight=0)
         self.grid_rowconfigure(2,weight=1)
         self.grid_columnconfigure(0,weight=0)
         self.grid_columnconfigure(1,weight=1)
         self.grid_columnconfigure(2,weight=0)
         self.grid_columnconfigure(3,weight=1)
+        self.grid_columnconfigure(4,weight=0)
 
+    def del_panel(self):
+        self.destroy() 
+
+    def generate_filename(self):
+        fn = self.artist.get().replace(" ","_") + "_-_" + self.track.get().replace(" ","_")
+        self.set_filename_entry_text(text=fn)
+        
+    def set_filename_entry_text(self,text):
+        self.filename.delete(0,END)
+        self.filename.insert(0,text)
         
