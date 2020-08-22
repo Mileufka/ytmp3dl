@@ -5,6 +5,7 @@ import os
 from tkinter import *
 #from gui import *
 #from tagger import apply_tags
+import mutagen
 from mutagen.easyid3 import EasyID3
 
 def download(data_set):
@@ -12,10 +13,17 @@ def download(data_set):
         if item.filename == "":
             item.generate_filename()
         file_path = os.getcwd()+'/storage/' + item.filename.get()
+        #print(file_path)
         os.system('youtube-dl -x --audio-format mp3 --audio-quality 192k --mark-watched --output "'+file_path+'.%(ext)s" '+item.url.get())
+        
+        file_path = file_path.replace('(','\(')
+        file_path = file_path.replace(')','\)')
+        file_path += '.mp3'
         os.system('chmod 755 '+file_path)
+        file_path = file_path.replace('\(','(')
+        file_path = file_path.replace('\)',')')
         apply_tags(filename=file_path,
-                   name=item.track.get(),
+                   title=item.track.get(),
                    artist=item.artist.get(),
                    year=item.year.get(),
                    composer=item.composer.get())
@@ -35,7 +43,7 @@ def apply_tags(filename,title,artist=None,year=None,composer=None):
     if artist is not None:
         tag['artist'] = artist
     if year is not None:
-        tag['year'] = year
+        tag['date'] = year
     if composer is not None:
         tag['composer'] = composer
     tag.save()
